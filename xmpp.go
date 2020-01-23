@@ -598,6 +598,7 @@ func (c *Client) Recv() (stanza interface{}, err error) {
 				OtherElem: v.Other,
 				Stamp:     stamp,
 			}
+			fmt.Printf("%+v", v)
 			return chat, nil
 		case *clientQuery:
 			var r Roster
