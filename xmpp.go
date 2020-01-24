@@ -546,6 +546,7 @@ type Chat struct {
 	Type      string
 	Text      string
 	Roster    Roster
+	Composing string
 	Other     []string
 	OtherElem []XMLElement
 	Stamp     time.Time
@@ -594,6 +595,7 @@ func (c *Client) Recv() (stanza interface{}, err error) {
 				Remote:    v.From,
 				Type:      v.Type,
 				Text:      v.Body,
+				Composing: v.Composing,
 				Other:     v.OtherStrings(),
 				OtherElem: v.Other,
 				Stamp:     stamp,
@@ -735,6 +737,7 @@ type clientMessage struct {
 	Body    string `xml:"body"`
 	Thread  string `xml:"thread"`
 
+	Composing string `xml:"composing"`
 	// Any hasn't matched element
 	Other []XMLElement `xml:",any"`
 
