@@ -578,10 +578,6 @@ type Chat struct {
 	ID        string
 	ReplaceID string
 	Roster    Roster
-	Composing string
-	Paused string
-	Active string
-	Inactive string
 	Chatstate string
 	Other     []string
 	OtherElem []XMLElement
