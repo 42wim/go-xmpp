@@ -547,6 +547,9 @@ type Chat struct {
 	Text      string
 	Roster    Roster
 	Composing string
+	Paused string
+	Active string
+	Inactive string
 	Other     []string
 	OtherElem []XMLElement
 	Stamp     time.Time
@@ -595,12 +598,27 @@ func (c *Client) Recv() (stanza interface{}, err error) {
 				Remote:    v.From,
 				Type:      v.Type,
 				Text:      v.Body,
-				Composing: v.Composing,
+				Composing: v.Composing.Xmlns,
+				Paused:    v.Paused.Xmlns,
+				Active:	   v.Active.Xmlns,
+				Inactive:  v.Inactive.Xmlns,
 				Other:     v.OtherStrings(),
 				OtherElem: v.Other,
 				Stamp:     stamp,
 			}
-			fmt.Printf("%+v", v)
+			if chat.Composing != "" {
+				fmt.Printf("%+v", "Composing")
+			}
+			if chat.Paused != "" {
+				fmt.Printf("%+v", "Paused")
+			}
+			if chat.Inactive != "" {
+				fmt.Printf("%+v", "Inactive")
+			}
+			if chat.Active != "" {
+				fmt.Printf("%+v", "Active")
+			}
+			//fmt.Printf("%+v", chat)
 			return chat, nil
 		case *clientQuery:
 			var r Roster
@@ -737,11 +755,18 @@ type clientMessage struct {
 	Body    string `xml:"body"`
 	Thread  string `xml:"thread"`
 
-	Composing string `xml:"composing"`
+	Composing ChatState `xml:"composing"`
+	Paused ChatState `xml:"paused"`
+	Active ChatState `xml:"active"`
+	Inactive ChatState `xml:"inactive"`
 	// Any hasn't matched element
 	Other []XMLElement `xml:",any"`
 
 	Delay Delay `xml:"delay"`
+}
+
+type ChatState struct {
+	Xmlns string `xml:"xmlns,attr"`
 }
 
 func (m *clientMessage) OtherStrings() []string {
